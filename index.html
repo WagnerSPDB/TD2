@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>teste</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+    <h1 style="font-family: arial;" class="titulo">Lista de Tarefas</h1>
+    <form>
+        <select id="listaSelecionada">
+            <option value=1>Curto Prazo</option>
+            <option value=2>Longo Prazo</option>
+        </select>
+        <input name="campoCriaItem" placeholder="Digite: ">
+        <button type="submit" class = "criar">Criar</button>
+    </form>
+    <ul class="listaDeItens">        
+    </ul>
+    <script>
+        //Base de dados
+        const baseDeDados = {
+            itens: [],
+            criaItem(dados, htmlOnly = false) {
+                //Cria item na memória
+                if (!htmlOnly) {
+                    const novoItem = {
+                        id: Date.now(),
+                        content: dados.content,
+                        classe: dados.classe
+                    };
+                    baseDeDados.itens.push(novoItem);
+
+                    // Chama a função que cria no HTML
+                    this.renderizaItem(novoItem);
+                }
+            },
+            renderizaItem(item) {
+                // Cria item no HTML
+                const $listaDeItens = document.querySelector('.listaDeItens');
+                const $novoItem = document.createElement('li');
+                $novoItem.dataset.id = item.id;
+                let imagem = '';
+                if(item.classe == '1'){
+                    imagem = "curtoprazo.png";
+                } else {
+                    imagem = "longoprazo.png";
+                }
+                $novoItem.innerHTML = `<label>
+                        <input type="checkbox" onchange="toggleSelecionado(this)"> 
+                        <span><img src="${imagem}" class = "imagens" alt="Curto Prazo"></span><span class="texto">${item.content}</span>
+                    </label>
+                    <button class="btn-delete"></button>
+                    <button class="btn-edit"></button>
+                    <button class="btn-save" style="display: none;"></button>`;
+                 $listaDeItens.appendChild($novoItem);
+                
+            },
+            deletaItem(id){
+                baseDeDados.itens = baseDeDados.itens.filter(item => item.id !== id);
+                const $itemParaRemover = document.querySelector(`.listaDeItens li[data-id="${id}"]`);
+                if ($itemParaRemover) {
+                    $itemParaRemover.remove();
+                }
+            },
+            atualizaItem(id, novoConteudo){
+                const itemAtualizar = baseDeDados.itens.find((item)=> {
+                        return item.id === Number(id);
+                });
+                itemAtualizar.content = novoConteudo
+            }
+        }
+
+        // Função para alternar a seleção e o risco do item
+        function toggleSelecionado(checkbox) {
+            const liElement = checkbox.parentNode.parentNode;
+            liElement.classList.toggle('selected');
+            const spanElement = liElement.querySelector('span');
+            if (checkbox.checked) {
+                spanElement.style.textDecoration = 'line-through';
+            } else {
+                spanElement.style.textDecoration = 'none';
+            }
+        }
+
+        // Só pra ver no console e ter o controle
+        const $meuForm = document.querySelector('form');
+        console.log($meuForm);
+
+        // Read
+        baseDeDados.itens.forEach(item => baseDeDados.renderizaItem(item));
+
+        // Create
+        $meuForm.addEventListener('submit', function criaItemController(infosDoEvento){
+            infosDoEvento.preventDefault();
+            const $campoCriaItem = document.querySelector('input[name="campoCriaItem"]');
+            const listaSelecionada = document.getElementById('listaSelecionada').value; // Obtém o valor selecionado do select
+            console.log(listaSelecionada);
+            baseDeDados.criaItem({content:$campoCriaItem.value, classe: listaSelecionada}); // Passa o valor do select para a função
+            $campoCriaItem.value='';
+        })
+
+        // Delete
+        document.querySelector('.listaDeItens').addEventListener('click', function (infosDoEvento){
+            const elementoAtual = infosDoEvento.target;
+            if (elementoAtual.classList.contains('btn-delete')) {
+                const $item = elementoAtual.parentNode;
+                const id = parseInt($item.dataset.id);
+                baseDeDados.deletaItem(id);
+            }
+        })
+
+        // Edit
+        document.querySelector('.listaDeItens').addEventListener('click', function (infosDoEvento){
+            const elementoAtual = infosDoEvento.target;
+            if (elementoAtual.classList.contains('btn-edit')) {
+                const $item = elementoAtual.parentNode;
+                const $span = $item.querySelector('.texto'); // Seleciona o span com a classe "texto"
+                const $btnEdit = $item.querySelector('.btn-edit');
+                const $btnSave = $item.querySelector('.btn-save');
+                const $checkbox = $item.querySelector('input[type="checkbox"]');
+
+                // Verifica se a caixa de seleção está marcada
+                if (!$checkbox.checked) {
+                    $span.contentEditable = true;
+                    $span.focus();
+                    $btnEdit.style.display = 'none';
+                    $btnSave.style.display = 'inline';
+                } else {
+                    alert("Não é possível editar um item marcado");
+                }
+            }
+        })
+
+        // Save
+        document.querySelector('.listaDeItens').addEventListener('click', function (infosDoEvento){
+            const elementoAtual = infosDoEvento.target;
+            if (elementoAtual.classList.contains('btn-save')) {
+                const $item = elementoAtual.parentNode;
+                const id = parseInt($item.dataset.id);
+                const $span = $item.querySelector('.texto'); // Seleciona o span com a classe "texto"
+                const novoConteudo = $span.innerText;
+
+                baseDeDados.atualizaItem(id, novoConteudo);
+                
+                $span.contentEditable = false;
+                $item.querySelector('.btn-edit').style.display = 'inline';
+                elementoAtual.style.display = 'none';
+            }
+        })
+
+    </script>
+</body>
+</html>

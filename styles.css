@@ -1,0 +1,88 @@
+body{
+    text-align: center;
+    background-color: #B0C4DE;
+}
+
+ul{
+    font-size: 30px;
+}
+
+button{
+    margin-left: 10px;
+    background-size: contain; /* Redimensiona a imagem para caber completamente no botão */
+    background-repeat: no-repeat;
+    border: none;
+    vertical-align: middle;
+    cursor: pointer;
+    background-color: none;
+}
+
+
+.item-content {
+    display: inline-block;
+    min-width: 100px; /* Defina a largura mínima conforme necessário */
+    padding: 4px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-right: 8px;
+}
+
+.item-content[contenteditable="true"] {
+    background-color: #f0f0f0;
+    border-color: #999;
+}
+
+.imagens{
+    margin-left: 10px;
+    margin-right: 10px; 
+    border: none;
+    vertical-align: middle;
+    background-color: none;
+    width: 60px;
+    height: 60px;
+}
+
+.btn-delete{
+    background-image: url('lixeira.png');
+    width: 40px;
+    height: 40px;
+    background-color: #B0C4DE;
+}
+
+.btn-edit{
+    background-image: url('lapis.png');
+    width: 40px;
+    height: 40px;
+    background-color: #B0C4DE;
+}
+
+.btn-save{
+    background-image: url('save.png');
+    width: 40px;
+    height: 40px;
+    background-color: #B0C4DE;
+}
+
+
+.selected span {
+    text-decoration: line-through;
+    color: #A9A9A9;
+}
+
+.listaDeItens {
+    list-style-type: none;
+    list-style: none;
+    padding: 0;
+}
+
+.titulo{
+    background-color: #4682B4;
+    display: inline-block;
+    padding: 20px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+}
+
+@media only screen and (max-width: 600px) {
+
+}
