@@ -46,15 +46,17 @@
                 } else {
                     imagem = "longoprazo.png";
                 }
-                $novoItem.innerHTML = `<label>
-                        <input type="checkbox" onchange="toggleSelecionado(this)"> 
-                        <span><img src="${imagem}" class = "imagens" alt="Curto Prazo"></span><span class="texto">${item.content}</span>
-                    </label>
-                    <button class="btn-delete"></button>
-                    <button class="btn-edit"></button>
-                    <button class="btn-save" style="display: none;"></button>`;
-                 $listaDeItens.appendChild($novoItem);
-                
+                $novoItem.innerHTML = 
+                `<label>
+                    <input type="checkbox" onchange="toggleSelecionado(this)"> 
+                    <span><img src="${imagem}" class = "imagens" alt="Curto Prazo">
+                </label>    
+                </span><span class="texto">${item.content}</span>
+                <button class="btn-delete"></button>
+                <button class="btn-edit"></button>
+                <button class="btn-save" style="display: none;"></button>`;
+             $listaDeItens.appendChild($novoItem);
+            
             },
             deletaItem(id){
                 baseDeDados.itens = baseDeDados.itens.filter(item => item.id !== id);
@@ -82,6 +84,8 @@
                 spanElement.style.textDecoration = 'none';
             }
         }
+
+
 
         // Só pra ver no console e ter o controle
         const $meuForm = document.querySelector('form');
@@ -148,7 +152,6 @@
                 elementoAtual.style.display = 'none';
             }
         })
-
     </script>
 </body>
 </html>
